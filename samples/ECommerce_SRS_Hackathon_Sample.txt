@@ -1,0 +1,77 @@
+Software Requirements Specification — ShopSphere E-Commerce Platform
+
+1. Introduction
+
+This document specifies the requirements for the ShopSphere e-commerce platform. It is intended for the development, quality assurance and operations teams.
+
+2. Account Management
+
+R001: The system shall allow new users to create an account using an email address and a password.
+R002: The system shall allow registered users to log in using their email address and password.
+R003: The system shall allow users to log in using their mobile number and password only.
+R004: The system shall allow a user to reset a forgotten password through a password reset link.
+R005: The system shall lock a user account after five consecutive failed login attempts.
+R006: The system shall send notifications.
+R007: The system shall allow users to update their profile information.
+
+3. Product Catalogue
+
+R008: The system shall display a catalogue of products with name, price, description and availability.
+R009: The system shall allow customers to search for products by keyword.
+R010: The system shall allow customers to filter search results by category, price range and rating.
+R011: Search results shall be returned quickly.
+R012: The system shall display product reviews submitted by verified purchasers.
+R013: The system shall support at least 50,000 product listings.
+
+4. Shopping Cart and Checkout
+
+R014: The system shall allow a logged-in customer to add products to a shopping cart.
+R015: The system shall allow a customer to remove products from the shopping cart.
+R016: The system shall calculate the cart total including applicable taxes and shipping charges.
+R017: The system shall allow customers to register for an account.
+R018: The system shall allow customers to complete a purchase using the checkout process.
+R019: Guest checkout is not allowed; all purchases require a registered account.
+R020: The system shall allow users to check out without creating an account.
+R021: The system shall support payment by credit card, debit card and digital wallet.
+R022: The system shall send an order confirmation email after a successful purchase.
+
+5. Order Management
+
+R023: The system shall allow customers to view their order history.
+R024: The system shall allow customers to track the delivery status of a placed order.
+R025: The system shall allow customers to cancel an order before it has been shipped.
+R026: The application shall respond quickly to user requests.
+R027: The system shall allow administrators to update the status of an order.
+R028: Refunds shall be processed in a reasonable time frame.
+
+6. Administration
+
+R029: The system shall allow administrators to add, edit and remove product listings.
+R030: The system shall allow administrators to view sales reports.
+R031: The system shall provide an appropriate level of access control for administrative functions.
+R032: The system shall record an audit log of all administrative actions.
+R033: The system shall allow administrators to manage user accounts.
+
+7. Security
+
+R034: The system shall encrypt all stored customer passwords.
+R035: All data transmitted between the client and the server shall be encrypted using TLS 1.2 or higher.
+R036: The system shall be secure against common web vulnerabilities.
+R037: The system shall require multi-factor authentication for all administrator accounts.
+R038: Administrators shall be able to sign in with only a username and password.
+R039: Customer payment card details shall not be stored on the platform's own servers.
+
+8. Performance and Availability
+
+R040: The system shall support at least 5,000 concurrent users without degradation of service.
+R041: The system should be fast during normal usage.
+R042: The checkout process shall complete within 3 seconds for 95% of transactions under normal operating conditions.
+R043: The platform shall maintain 99.9% uptime measured monthly.
+R044: The system shall be easy to use.
+R045: The system shall scale to handle large traffic volumes during sale events.
+
+9. Reporting and Analytics
+
+R046: The system shall generate a daily sales summary report for administrators.
+R047: The system shall allow administrators to export reports.
+R048: The system shall track product page views for analytics purposes.

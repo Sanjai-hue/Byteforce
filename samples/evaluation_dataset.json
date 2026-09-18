@@ -1,0 +1,66 @@
+{
+  "document": "ECommerce_SRS_Hackathon_Sample.docx",
+  "note": "Ground truth for scoring only. Requirement codes below refer to the printed labels in the sample document (R001...), which the pipeline re-numbers in document order; the evaluator maps them by matching original text.",
+  "duplicates": [
+    {
+      "a": "R001",
+      "b": "R017",
+      "reason": "account creation stated twice"
+    }
+  ],
+  "contradictions": [
+    {
+      "a": "R002",
+      "b": "R003",
+      "reason": "email login vs mobile-number-only login"
+    },
+    {
+      "a": "R019",
+      "b": "R020",
+      "reason": "guest checkout forbidden vs allowed"
+    },
+    {
+      "a": "R037",
+      "b": "R038",
+      "reason": "admin MFA required vs password-only sign-in"
+    }
+  ],
+  "ambiguities": [
+    "R011",
+    "R026",
+    "R028",
+    "R031",
+    "R036",
+    "R041",
+    "R044",
+    "R045"
+  ],
+  "missing_information": [
+    "R006",
+    "R047"
+  ],
+  "dependencies": [
+    {
+      "source": "R002",
+      "target": "R001",
+      "reason": "login requires an account"
+    },
+    {
+      "source": "R018",
+      "target": "R014",
+      "reason": "checkout requires a cart"
+    },
+    {
+      "source": "R024",
+      "target": "R018",
+      "reason": "tracking requires a placed order"
+    }
+  ],
+  "clean_requirements": [
+    "R042",
+    "R043",
+    "R035",
+    "R013",
+    "R040"
+  ]
+}

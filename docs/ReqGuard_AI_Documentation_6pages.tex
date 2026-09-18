@@ -1,0 +1,460 @@
+% ============================================================================
+%  ReqGuard AI -- Project Documentation (6-page condensed version)
+%  Delulu 2 Deploy Hackathon -- Problem Statement G14 (Generative AI)
+%
+%  Compile:  pdflatex ReqGuard_AI_Documentation_6pages.tex   (run twice)
+%
+%  ---------------------------------------------------------------------------
+%  PAGE-FIT KNOBS -- if it lands at 5 or 7 pages, adjust in this order:
+%    1. \documentclass[10pt] -> [11pt] to grow, or margin=0.85in -> 0.95in
+%    2. The \compactspacing block below (\parskip / \itemsep)
+%    3. Drop the Listing 1 code block (Sec. 6.2) to lose ~1/3 page
+%    4. Scale the figures: scale=0.92 in the two \begin{tikzpicture}[...]
+%  ---------------------------------------------------------------------------
+%  EDIT BEFORE SUBMITTING: \TeamName, \TeamMembers, \CollegeName
+% ============================================================================
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+
+\usepackage[margin=0.85in,top=0.8in,bottom=0.8in]{geometry}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{listings}
+\usepackage{caption}
+\usepackage{fancyhdr}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, fit, backgrounds}
+\usepackage{hyperref}
+
+\definecolor{primary}{RGB}{79,70,229}
+\definecolor{accent}{RGB}{13,148,136}
+\definecolor{warn}{RGB}{180,83,9}
+\definecolor{codebg}{RGB}{247,247,250}
+\definecolor{codeframe}{RGB}{205,205,215}
+
+\hypersetup{colorlinks=true, linkcolor=primary, urlcolor=accent,
+  pdftitle={ReqGuard AI -- Project Documentation},
+  pdfsubject={Delulu 2 Deploy Hackathon -- Problem Statement G14}}
+
+% ---------- compact spacing ----------
+\setlength{\parskip}{3pt}
+\setlength{\parindent}{0pt}
+\setlist{nosep, leftmargin=1.25em, topsep=2pt, itemsep=1.5pt}
+\captionsetup{font=small, skip=4pt}
+\titlespacing*{\section}{0pt}{8pt}{3pt}
+\titlespacing*{\subsection}{0pt}{6pt}{2pt}
+\titleformat{\section}{\large\bfseries\color{primary}}{\thesection}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries\color{primary!80!black}}{\thesubsection}{0.5em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\footnotesize ReqGuard AI --- Requirements Engineering Agent (G14)}
+\fancyhead[R]{\footnotesize \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\lstdefinestyle{code}{backgroundcolor=\color{codebg}, basicstyle=\ttfamily\scriptsize,
+  breaklines=true, frame=single, rulecolor=\color{codeframe}, framesep=4pt,
+  columns=fullflexible, keepspaces=true, tabsize=2, showstringspaces=false,
+  aboveskip=5pt, belowskip=4pt}
+\lstset{style=code}
+
+% ---------- EDIT THESE ----------
+\newcommand{\TeamName}{Byteforce}
+\newcommand{\TeamMembers}{Member 1, Member 2, Member 3, Member 4}
+\newcommand{\CollegeName}{[Your College / Institution]}
+
+\begin{document}
+
+% ================= TITLE BLOCK (compact, no separate title page) =============
+\begin{center}
+  {\LARGE\bfseries\color{primary} ReqGuard AI}\\[2pt]
+  {\large\itshape An AI Requirements Engineering Agent}\\[4pt]
+  {\footnotesize Delulu 2 Deploy Hackathon \quad$\vert$\quad Problem Statement
+   \textbf{G14} (Generative AI)}\\[4pt]
+  {\footnotesize \textbf{Team:} \TeamName \quad$\vert$\quad \TeamMembers
+   \quad$\vert$\quad \CollegeName \quad$\vert$\quad \today}
+\end{center}
+\vspace{2pt}
+\hrule
+\vspace{6pt}
+
+\begin{center}
+\begin{minipage}{0.93\textwidth}
+{\small\textbf{Abstract.} Requirements documents are where software projects go
+wrong first: a requirement that says ``the application shall respond quickly''
+cannot be tested, and two requirements that each claim exclusive control of
+login cannot both be built. ReqGuard AI reads a Software Requirements
+Specification (PDF, DOCX or TXT), extracts the individual requirements, and
+reports the ambiguities, contradictions, duplicates, missing details and hidden
+dependencies inside it. Every finding quotes evidence from the document and
+traces back to the requirement it came from. The system is a complete
+end-to-end application --- a modular pipeline of independently testable stages,
+not a single prompt --- verified by 73 unit tests, 49 live API checks and 28
+browser checks, with evaluation figures measured from a real run rather than
+asserted.}
+\end{minipage}
+\end{center}
+\vspace{4pt}
+
+% ============================================================================
+\section{Problem and Objectives}
+
+A requirement that cannot be tested, one that is silently repeated in two
+sections, or two that cannot both be satisfied will each become a defect, a
+duplicated implementation, or a late redesign. None of this is visible until
+somebody reads the entire specification carefully, and most teams never do.
+Problem statement G14 asks for a generative-AI agent that performs this review
+automatically, before implementation begins.
+
+\textbf{Objectives.} (i)~Extract individual requirements from PDF/DOCX/TXT while
+preserving exact original wording; (ii)~detect ambiguous, untestable
+requirements and quote the offending term; (iii)~detect semantic duplicates;
+(iv)~detect contradictory pairs with the conflicting clause from each side;
+(v)~detect missing information an implementer would have to ask about;
+(vi)~build a requirement dependency graph; (vii)~produce a traceability matrix
+linking every finding to its source; (viii)~let a reviewer accept, edit or
+reject each suggested refinement and export a clean requirement set without
+ever discarding the original text; and (ix)~deliver all of this as a real,
+deployable application --- no mockups, no hard-coded findings, no fabricated
+statistics.
+
+\begin{table}[h!]
+\centering\small
+\begin{tabular}{@{}p{3.1cm} p{12.3cm}@{}}
+\toprule
+\textbf{Output} & \textbf{Description} \\
+\midrule
+Clean requirement set & Every requirement with accepted refinements applied and confirmed duplicates marked; original wording always retained. \\
+Ambiguity report & Requirements an engineer and a tester could read differently, with the offending term quoted. \\
+Contradiction report & Requirement pairs that cannot both be satisfied, side by side with the conflicting clause from each. \\
+Duplicate report & Pairs confirmed to state the same requirement, with the embedding similarity that surfaced them. \\
+Dependency graph & An interactive graph of which requirements must be built before others. \\
+Traceability matrix & Every requirement, its source section/page, and every finding raised against it. \\
+\bottomrule
+\end{tabular}
+\caption{What the system produces}
+\end{table}
+
+% ============================================================================
+\section{System Architecture}
+
+The frontend never talks to the database and never holds an API key. Every
+credential lives server-side; the browser only calls the FastAPI service over
+HTTPS.
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[scale=1, transform shape,
+  node distance=0.75cm and 1.4cm,
+  box/.style={draw, rounded corners, thick, minimum height=0.8cm, minimum width=2.9cm, align=center, font=\scriptsize},
+  ui/.style={box, fill=primary!10, draw=primary},
+  be/.style={box, fill=accent!12, draw=accent},
+  svc/.style={box, fill=primary!5, draw=primary!60, minimum width=3.5cm},
+  data/.style={box, fill=warn!8, draw=warn!70, minimum width=3.5cm},
+  arr/.style={-{Latex[length=2mm]}, thick}]
+
+  \node[ui] (front) {Browser\\React 19 + Vite + TS};
+  \node[be, right=2.0cm of front] (api) {FastAPI Backend\\Python 3.12};
+  \node[svc, above right=0.35cm and 1.5cm of api] (emb) {EmbeddingService\\BAAI/bge-small-en-v1.5 (384d)};
+  \node[svc, right=1.5cm of api] (ai) {AIService\\Groq LLM};
+  \node[data, below right=0.35cm and 1.5cm of api] (db) {InsForge PostgreSQL\\+ pgvector (HNSW)};
+  \node[data, below=0.75cm of ai] (store) {InsForge Storage};
+
+  \draw[arr] (front) -- node[above, font=\tiny]{HTTPS / REST} (api);
+  \draw[arr] (api) -- (emb);
+  \draw[arr] (api) -- (ai);
+  \draw[arr] (api) -- (db);
+  \draw[arr] (api) -- (store);
+  \begin{scope}[on background layer]
+    \node[draw=black!30, dashed, rounded corners, inner sep=6pt, fit=(api)(emb)(ai)] {};
+  \end{scope}
+\end{tikzpicture}
+\caption{Architecture. All secrets, model access and database access are server-side only.}
+\end{figure}
+
+% ============================================================================
+\section{The Analysis Pipeline}
+
+Each stage below is a separate service with its own prompt and its own tests.
+There is deliberately \textbf{no single prompt that ``does the analysis''}, so
+one stage can fail without corrupting the others, and each can be tested
+independently.
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[scale=0.97, transform shape,
+  node distance=0.5cm and 0.75cm,
+  st/.style={draw, rounded corners, thick, minimum height=0.72cm, minimum width=2.15cm, align=center, font=\tiny, fill=primary!8, draw=primary!70},
+  det/.style={draw, rounded corners, thick, align=left, font=\tiny, fill=accent!10, draw=accent!70, inner sep=5pt},
+  out/.style={st, fill=warn!10, draw=warn!70},
+  arr/.style={-{Latex[length=1.8mm]}, thick}]
+
+  \node[st] (doc) {Document\\PDF / DOCX / TXT};
+  \node[st, right=of doc] (parse) {Parser\\page + section};
+  \node[st, right=of parse] (ext) {Extraction\\original wording};
+  \node[st, right=of ext] (norm) {Normalisation\\+ embeddings};
+  \node[st, right=of norm] (cand) {Candidate pairs\\cosine similarity};
+
+  \node[det, below=0.85cm of norm, text width=7.4cm] (det)
+    {\textbf{Five independent detection services} (each: own prompt, own schema, own tests)\\
+     Duplicate verification \;$\vert$\; Contradiction verification \;$\vert$\; Ambiguity\\
+     Missing information \;$\vert$\; Dependency analysis};
+
+  \node[out, below=0.75cm of det, minimum width=2.6cm] (ref) {Refinement generation};
+  \node[out, left=0.9cm of ref, minimum width=2.6cm] (trace) {Traceability +\\clean set};
+  \node[out, right=0.9cm of ref, minimum width=2.6cm] (dash) {Database\\$\rightarrow$ Dashboard};
+
+  \draw[arr] (doc) -- (parse);
+  \draw[arr] (parse) -- (ext);
+  \draw[arr] (ext) -- (norm);
+  \draw[arr] (norm) -- (cand);
+  \draw[arr] (cand) |- (det.east);
+  \draw[arr] (ext) |- (det.west);
+  \draw[arr] (det) -- (ref);
+  \draw[arr] (ref) -- (trace);
+  \draw[arr] (ref) -- (dash);
+\end{tikzpicture}
+\caption{The pipeline. Pair-wise stages are fed by similarity-ranked candidates; per-requirement stages read the extracted text directly.}
+\end{figure}
+
+\textbf{Why two-stage detection matters.} Comparing every requirement against
+every other is quadratic: 100 requirements is 4{,}950 pairs, and sending all of
+them to a language model is slow and expensive. Instead, embeddings rank pairs
+by meaning and only those above a configurable similarity threshold reach the
+model. On the sample specification this cuts 1{,}128 possible pairs to 16
+duplicate candidates and 265 contradiction candidates. Similarity never decides
+anything by itself --- it only chooses what is worth reasoning about; the model
+makes the call and must quote evidence for it.
+
+\begin{table}[h!]
+\centering\small
+\begin{tabular}{@{}p{2.4cm} p{13.0cm}@{}}
+\toprule
+\textbf{Layer} & \textbf{Technologies} \\
+\midrule
+Frontend & React 19, TypeScript, Vite, Tailwind CSS v4, React Flow (\texttt{@xyflow/react}) for the dependency graph, React Router, Lucide \\
+Backend & Python 3.12+, FastAPI, Uvicorn, Pydantic v2, pydantic-settings \\
+AI & Groq (\texttt{openai/gpt-oss-20b}); an OpenRouter-compatible client sits behind the same interface, selected by \texttt{LLM\_PROVIDER} \\
+Embeddings & \texttt{BAAI/bge-small-en-v1.5} (sentence-transformers), 384 dimensions, cosine similarity \\
+Database & InsForge PostgreSQL with \texttt{pgvector} and an HNSW cosine index \\
+Parsing & pypdf, python-docx, plain text \\
+\bottomrule
+\end{tabular}
+\caption{Technology stack}
+\end{table}
+
+% ============================================================================
+\section{Implementation}
+
+\subsection{One choke point for every model call}
+
+Every language-model call in the codebase passes through a single class,
+\texttt{AIService}. Each call requests a JSON object validated against a
+Pydantic schema; invalid JSON triggers exactly one retry with a correction
+prompt; if that also fails, the stage raises and the run is marked
+\texttt{failed} with the real reason recorded. The system never substitutes a
+fabricated result to fill a gap.
+
+\subsection{Case study: the RequirementResolver bug}
+
+The first full end-to-end run reported \textbf{zero} duplicates and
+\textbf{zero} contradictions. The pipeline was not broken --- the model was
+returning the full requirement \emph{sentence} where the prompt asked for a
+short code (\texttt{R001}), and a strict dictionary lookup silently discarded
+every verdict that did not match a code exactly. A dedicated resolver now
+accepts four forms of reference:
+
+\begin{lstlisting}[language=Python, caption={\texttt{app/utils/resolve.py} --- defensive entity-reference resolution}]
+def resolve(self, reference: str | None) -> HasCodeAndText | None:
+    direct = self._by_code.get(raw.upper())        # 1. exact code, the documented contract
+    if direct is not None:
+        return direct
+    match = _CODE_PATTERN.search(raw)              # 2. code embedded in text ("Requirement R001")
+    if match:
+        found = self._by_code.get(match.group().upper())
+        if found is not None:
+            return found
+    exact_text = self._by_text.get(_key(raw))      # 3. full sentence echoed back instead of a code
+    if exact_text is not None:
+        return exact_text
+    if len(probe) >= 25:                           # 4. truncated or lightly reworded quote
+        for text, record in self._by_text.items():
+            if probe in text or text in probe:
+                return record
+    return None
+\end{lstlisting}
+
+After wiring this into the duplicate, contradiction, ambiguity, dependency and
+refinement services, the same document went from 0 to 2 duplicates and from 0
+to 40 contradictions. The findings had been there all along, only unread.
+
+\subsection{Thresholds, schema and security}
+
+\textbf{Thresholds are configuration, not constants,} because no single value is
+right for every document. Defaults were chosen by measuring the similarity
+distribution of the sample, not guessed: duplicate candidate cutoff
+\texttt{0.82}, contradiction cutoff \texttt{0.70}, candidate cap \texttt{300},
+and per-class confidence floors (contradiction \texttt{0.60}, partial conflict
+\texttt{0.85}, duplicate \texttt{0.60}, dependency \texttt{0.40}).
+
+\textbf{Schema.} Seven tables --- \texttt{documents}, \texttt{requirements},
+\texttt{analysis\_runs}, \texttt{issues}, \texttt{issue\_relationships},
+\texttt{dependencies}, \texttt{refinements} --- all with UUID primary keys, and
+a \texttt{vector(384)} embedding column indexed with HNSW.
+
+\textbf{Security.} Secrets exist only in backend environment variables:
+\texttt{GROQ\_API\_KEY} and the InsForge admin key are never sent to the
+browser, and no secret uses the \texttt{VITE\_} prefix, since anything with that
+prefix is compiled into the client bundle. Row Level Security is enabled on all
+seven tables with \emph{no} permissive policies and privileges revoked from the
+\texttt{anon} and \texttt{authenticated} roles --- verified live: an anonymous
+key returns HTTP 401 (\emph{permission denied for table documents}). Uploads are
+validated for type, size and filename, and a content/extension mismatch is
+rejected (415 for an unsupported type, 400 for an empty or mismatched file).
+CORS uses an explicit origin list, never a wildcard. Errors are logged
+server-side and returned as short, user-safe messages with no stack trace.
+\texttt{.env} is git-ignored on both sides; a scan of tracked source found no
+hardcoded credentials.
+
+\begin{table}[h!]
+\centering\small
+\begin{tabular}{@{}p{1.2cm} p{7.4cm} p{6.6cm}@{}}
+\toprule
+\textbf{Method} & \textbf{Path} & \textbf{Purpose} \\
+\midrule
+GET & \texttt{/health}, \texttt{/api/system/status} & Liveness; real readiness of DB, embeddings, LLM \\
+POST & \texttt{/api/documents/upload} & Upload an SRS (multipart \texttt{file}) \\
+POST & \texttt{/api/documents/\{id\}/analyze} & Start the analysis run \\
+GET & \texttt{/api/documents/\{id\}/status} & Stage, progress percentage, stats \\
+GET & \texttt{/api/documents/\{id\}/requirements} & Extracted requirements \\
+GET & \texttt{/api/documents/\{id\}/issues} & All findings; filters: type, severity, requirement, min.\ confidence \\
+GET & \texttt{/api/documents/\{id\}/ambiguities} $\vert$ \texttt{contradictions} $\vert$ \texttt{duplicates} $\vert$ \texttt{missing-information} & The four per-type reports \\
+GET & \texttt{/api/documents/\{id\}/dependencies} & Dependency graph nodes and edges \\
+GET & \texttt{/api/documents/\{id\}/traceability} & Traceability matrix \\
+GET & \texttt{/api/documents/\{id\}/clean-requirements} & Clean requirement set \\
+GET & \texttt{/api/documents/\{id\}/export?format=json$\vert$markdown} & Export the clean set \\
+POST & \texttt{/api/refinements/\{id\}/accept} $\vert$ \texttt{reject} $\vert$ \texttt{edit} & Act on a suggested rewrite \\
+\bottomrule
+\end{tabular}
+\caption{REST API. Interactive OpenAPI documentation is served at \texttt{/docs}.}
+\end{table}
+
+% ============================================================================
+\section{Testing and Verification}
+
+The system was verified at three independent levels, each exercising the real
+application rather than a mock of it.
+
+\begin{table}[h!]
+\centering\small
+\begin{tabular}{@{}p{4.4cm} p{1.9cm} p{9.0cm}@{}}
+\toprule
+\textbf{Level} & \textbf{Result} & \textbf{Coverage} \\
+\midrule
+Unit tests (\texttt{pytest}) & 73 / 73 passed & Parsing, upload validation, embeddings, candidate selection, every detection stage, AI validation and retry, reference resolution, endpoints, traceability, refinement round-trip \\
+Live demo flow (\texttt{verify\_demo\_flow.py}) & 49 / 49 passed & End-to-end walk against a running backend: health, rejection paths, a real analysis run, every report, filters, accept/edit/reject, export, 404s \\
+Browser UI checks & 28 / 28 passed & Rendered pages against live data in an installed browser \\
+\bottomrule
+\end{tabular}
+\caption{Verification summary}
+\end{table}
+
+Unit tests use a fake model client and an in-memory database, so they need no
+network access and cost nothing; the other two levels run against the real
+backend, database and model.
+
+% ============================================================================
+\section{Evaluation}
+
+\texttt{samples/evaluation\_dataset.json} holds ground-truth labels for a
+48-requirement sample specification containing deliberately seeded defects.
+\texttt{backend/evaluate.py} scores a completed run against those labels.
+
+\begin{table}[h!]
+\centering\small
+\begin{tabular}{@{}l c c c@{}}
+\toprule
+\textbf{Stage} & \textbf{Precision} & \textbf{Recall} & \textbf{F1} \\
+\midrule
+Requirement extraction & 1.00 & 1.00 & 1.00 \\
+Ambiguity detection & 0.67 & 1.00 & 0.80 \\
+Duplicate detection & 0.33 & 1.00 & 0.50 \\
+Contradiction detection & 0.08 & 1.00 & 0.15 \\
+Contradiction (confidence $\geq$ 0.9) & 0.20 & 1.00 & 0.33 \\
+Missing information & 0.09 & 1.00 & 0.16 \\
+\bottomrule
+\end{tabular}
+\caption{Measured on one run of the 48-requirement sample. Traceability: 76 of 76 issues carried a source requirement id (100\%).}
+\end{table}
+
+\textbf{Read these numbers carefully.} Recall is high --- every labelled problem
+was found. Precision is low for two separate and identifiable reasons. First,
+the ground-truth set is deliberately small (3 labelled contradictions, 2
+labelled missing-information items), so many findings counted as false
+positives are real problems that simply were never labelled. Second,
+contradiction detection genuinely over-reports: a requirement containing an
+exclusivity word such as ``only'' conflicts, in a technically correct sense,
+with many others, producing a cascade of true-but-redundant pairs from one root
+cause. These are measurements from one run on one small document, not a general
+accuracy claim, and no figure shown anywhere in the application is hard-coded.
+
+% ============================================================================
+\section{Deployment}
+
+Neither service assumes \texttt{localhost}: the frontend reads
+\texttt{VITE\_API\_URL} at build time and the backend reads
+\texttt{CORS\_ORIGINS} at runtime. \textbf{Backend --- Render:}
+\texttt{backend/render.yaml} is a ready blueprint; \texttt{INSFORGE\_URL},
+\texttt{INSFORGE\_API\_KEY}, \texttt{GROQ\_API\_KEY} and \texttt{CORS\_ORIGINS}
+are set as dashboard secrets and health checks use \texttt{/health}. The
+embedding model needs roughly 500\,MB of RAM, so the free instance tier is
+insufficient and the blueprint specifies Starter. \textbf{Frontend --- Vercel:}
+\texttt{vercel --prod} with \texttt{VITE\_API\_URL} pointed at the deployed
+backend, whose \texttt{CORS\_ORIGINS} then includes the Vercel domain.
+
+% ============================================================================
+\section{Design Decisions and Limitations}
+
+\textbf{Design decisions.}
+\begin{itemize}
+  \item \textbf{Original wording is never overwritten.} Extraction copies each requirement exactly as printed; normalisation produces a separate comparison string used only for embeddings; refinements live in their own table as proposals, and accepting one changes what the clean set renders, not the stored requirement.
+  \item \textbf{Every finding must trace to a requirement.} Issues carry a requirement id and pair findings carry both. A finding that cannot be traced is not reported.
+  \item \textbf{Models return codes, but not reliably} --- hence the resolver of Section~4.2, without which correct findings were silently discarded.
+  \item \textbf{Failures are visible.} A stage that cannot parse a model response fails the run and records why; nothing is invented to fill the gap.
+\end{itemize}
+
+\textbf{Known limitations.}
+\begin{itemize}
+  \item \textbf{Contradiction precision is low.} One exclusivity clause generates many true-but-redundant pairs. The report offers a ``direct contradictions only'' filter and tunable confidence floors, but grouping cascading conflicts under a single root cause is not implemented.
+  \item \textbf{Dependency recall varies between runs,} because requirements are analysed in overlapping windows and an edge between two distant requirements can be missed.
+  \item \textbf{Analysis takes several minutes} for 48 requirements, dominated by sequential model calls; running the independent stages concurrently would cut this substantially.
+  \item \textbf{The evaluation set is small} --- one document, a handful of labels. Treat the figures as a smoke test of behaviour, not a benchmark.
+  \item \textbf{Uploaded bytes are held in memory} between upload and analysis, so a restart between the two steps requires re-uploading.
+\end{itemize}
+
+% ============================================================================
+\section{Conclusion}
+
+ReqGuard AI is a complete, working requirements-engineering agent: upload,
+extraction, semantic similarity, duplicate detection, ambiguity detection,
+contradiction detection, dependency analysis, traceability, refinement and a
+real dashboard --- with no stage mocked and no statistic invented. Every claim
+here is backed by a check that was actually run: 73 unit tests, 49 live API
+checks and 28 browser checks, all passing, plus a measured evaluation against a
+labelled sample. The clearest next steps are grouping cascading contradictions
+under a single root cause to raise precision without losing recall,
+parallelising the independent detection stages to cut analysis time, and
+expanding the labelled evaluation set across more varied specifications.
+
+\vspace{4pt}
+{\footnotesize\textit{Built with Groq, InsForge (PostgreSQL + pgvector),
+\texttt{BAAI/bge-small-en-v1.5} via sentence-transformers, FastAPI and React.}}
+
+\end{document}

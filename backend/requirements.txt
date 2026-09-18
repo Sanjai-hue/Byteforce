@@ -1,0 +1,24 @@
+fastapi==0.141.1
+uvicorn[standard]==0.53.0
+pydantic==2.13.5
+pydantic-settings==2.15.0
+python-multipart==0.0.32
+httpx==0.28.1
+python-dotenv==1.2.3
+tenacity==9.1.4
+
+# LLM provider (Groq is the default; OpenRouter uses plain httpx)
+groq==1.7.0
+
+# Embeddings / similarity — BAAI/bge-small-en-v1.5
+sentence-transformers==6.0.1
+scikit-learn==1.9.1
+numpy==2.5.3
+
+# Document parsing
+pypdf==6.19.0
+python-docx==1.2.0
+
+# Tests
+pytest==9.1.1
+pytest-asyncio==1.4.0

@@ -1,0 +1,207 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R 5 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 7 0 R >> >> /Contents 4 0 R >>
+endobj
+4 0 obj
+<< /Length 2835 >>
+stream
+BT
+/F1 9 Tf
+12 TL
+40 750 Td
+(Software Requirements Specification ? ShopSphere E-Commerce Platform) Tj
+T*
+() Tj
+T*
+(1. Introduction) Tj
+T*
+(This document specifies the requirements for the ShopSphere e-commerce platform. It is intended) Tj
+T*
+(for the development, quality assurance and operations teams.) Tj
+T*
+() Tj
+T*
+(2. Account Management) Tj
+T*
+(R001: The system shall allow new users to create an account using an email address and a) Tj
+T*
+(password.) Tj
+T*
+(R002: The system shall allow registered users to log in using their email address and password.) Tj
+T*
+(R003: The system shall allow users to log in using their mobile number and password only.) Tj
+T*
+(R004: The system shall allow a user to reset a forgotten password through a password reset) Tj
+T*
+(link.) Tj
+T*
+(R005: The system shall lock a user account after five consecutive failed login attempts.) Tj
+T*
+(R006: The system shall send notifications.) Tj
+T*
+(R007: The system shall allow users to update their profile information.) Tj
+T*
+() Tj
+T*
+(3. Product Catalogue) Tj
+T*
+(R008: The system shall display a catalogue of products with name, price, description and) Tj
+T*
+(availability.) Tj
+T*
+(R009: The system shall allow customers to search for products by keyword.) Tj
+T*
+(R010: The system shall allow customers to filter search results by category, price range and) Tj
+T*
+(rating.) Tj
+T*
+(R011: Search results shall be returned quickly.) Tj
+T*
+(R012: The system shall display product reviews submitted by verified purchasers.) Tj
+T*
+(R013: The system shall support at least 50,000 product listings.) Tj
+T*
+() Tj
+T*
+(4. Shopping Cart and Checkout) Tj
+T*
+(R014: The system shall allow a logged-in customer to add products to a shopping cart.) Tj
+T*
+(R015: The system shall allow a customer to remove products from the shopping cart.) Tj
+T*
+(R016: The system shall calculate the cart total including applicable taxes and shipping) Tj
+T*
+(charges.) Tj
+T*
+(R017: The system shall allow customers to register for an account.) Tj
+T*
+(R018: The system shall allow customers to complete a purchase using the checkout process.) Tj
+T*
+(R019: Guest checkout is not allowed; all purchases require a registered account.) Tj
+T*
+(R020: The system shall allow users to check out without creating an account.) Tj
+T*
+(R021: The system shall support payment by credit card, debit card and digital wallet.) Tj
+T*
+(R022: The system shall send an order confirmation email after a successful purchase.) Tj
+T*
+() Tj
+T*
+(5. Order Management) Tj
+T*
+(R023: The system shall allow customers to view their order history.) Tj
+T*
+(R024: The system shall allow customers to track the delivery status of a placed order.) Tj
+T*
+(R025: The system shall allow customers to cancel an order before it has been shipped.) Tj
+T*
+(R026: The application shall respond quickly to user requests.) Tj
+T*
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 7 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 2093 >>
+stream
+BT
+/F1 9 Tf
+12 TL
+40 750 Td
+(R027: The system shall allow administrators to update the status of an order.) Tj
+T*
+(R028: Refunds shall be processed in a reasonable time frame.) Tj
+T*
+() Tj
+T*
+(6. Administration) Tj
+T*
+(R029: The system shall allow administrators to add, edit and remove product listings.) Tj
+T*
+(R030: The system shall allow administrators to view sales reports.) Tj
+T*
+(R031: The system shall provide an appropriate level of access control for administrative) Tj
+T*
+(functions.) Tj
+T*
+(R032: The system shall record an audit log of all administrative actions.) Tj
+T*
+(R033: The system shall allow administrators to manage user accounts.) Tj
+T*
+() Tj
+T*
+(7. Security) Tj
+T*
+(R034: The system shall encrypt all stored customer passwords.) Tj
+T*
+(R035: All data transmitted between the client and the server shall be encrypted using TLS 1.2) Tj
+T*
+(or higher.) Tj
+T*
+(R036: The system shall be secure against common web vulnerabilities.) Tj
+T*
+(R037: The system shall require multi-factor authentication for all administrator accounts.) Tj
+T*
+(R038: Administrators shall be able to sign in with only a username and password.) Tj
+T*
+(R039: Customer payment card details shall not be stored on the platform's own servers.) Tj
+T*
+() Tj
+T*
+(8. Performance and Availability) Tj
+T*
+(R040: The system shall support at least 5,000 concurrent users without degradation of service.) Tj
+T*
+(R041: The system should be fast during normal usage.) Tj
+T*
+(R042: The checkout process shall complete within 3 seconds for 95% of transactions under normal) Tj
+T*
+(operating conditions.) Tj
+T*
+(R043: The platform shall maintain 99.9% uptime measured monthly.) Tj
+T*
+(R044: The system shall be easy to use.) Tj
+T*
+(R045: The system shall scale to handle large traffic volumes during sale events.) Tj
+T*
+() Tj
+T*
+(9. Reporting and Analytics) Tj
+T*
+(R046: The system shall generate a daily sales summary report for administrators.) Tj
+T*
+(R047: The system shall allow administrators to export reports.) Tj
+T*
+(R048: The system shall track product page views for analytics purposes.) Tj
+T*
+() Tj
+T*
+ET
+endstream
+endobj
+7 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000121 00000 n 
+0000000247 00000 n 
+0000003134 00000 n 
+0000003260 00000 n 
+0000005405 00000 n 
+trailer
+<< /Size 8 /Root 1 0 R >>
+startxref
+5475
+%%EOF

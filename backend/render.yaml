@@ -1,0 +1,31 @@
+# Render blueprint for the ReqGuard backend.
+# Deploy from the repository root; Render builds the `backend` directory.
+services:
+  - type: web
+    name: reqguard-api
+    runtime: python
+    rootDir: backend
+    plan: starter            # the embedding model needs more RAM than the free plan offers
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.7"
+      - key: ENVIRONMENT
+        value: production
+      # Set these in the Render dashboard; never commit real values.
+      - key: INSFORGE_URL
+        sync: false
+      - key: INSFORGE_API_KEY
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: LLM_PROVIDER
+        value: groq
+      - key: GROQ_MODEL
+        value: openai/gpt-oss-20b
+      - key: GROQ_REASONING_EFFORT
+        value: low            # keeps a full analysis inside the free tier's daily token quota
+      - key: CORS_ORIGINS
+        sync: false          # e.g. https://reqguard.vercel.app

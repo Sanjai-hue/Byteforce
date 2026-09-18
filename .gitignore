@@ -1,0 +1,42 @@
+# Environment & secrets
+.env
+.env.local
+.env*.local
+*.env
+
+# InsForge & AI agent configuration
+.insforge
+.agent
+.agents
+.augment
+.claude
+.cline
+.github/copilot*
+.kilocode
+.qoder
+.qwen
+.roo
+.trae
+
+# Node / Frontend
+node_modules/
+dist/
+.output/
+
+# Python / Backend
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+.eggs/
+venv/
+.venv/
+env/
+
+# OS metadata
+.DS_Store
+Thumbs.db
