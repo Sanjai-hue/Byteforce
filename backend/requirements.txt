@@ -7,6 +7,9 @@ httpx==0.28.1
 python-dotenv==1.2.3
 tenacity==9.1.4
 
+# Verifying InsForge user access tokens (RS256, public key from the project's JWKS)
+PyJWT[crypto]==2.10.1
+
 # LLM provider (Groq is the default; OpenRouter uses plain httpx)
 groq==1.7.0
 
